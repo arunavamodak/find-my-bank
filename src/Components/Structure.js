@@ -10,7 +10,6 @@ function Structure({component}) {
         <>
             <Layout>
                 <Sider>
-                    <div className="logo" style={{height : "8vh"}} />
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                         <Menu.Item key="1" icon={<BankOutlined />}>
                             <Link to="/all-banks">All Banks</Link>
@@ -21,7 +20,7 @@ function Structure({component}) {
                     </Menu>
                 </Sider>
                 <Layout>
-                    <Content style={{ margin: '24px 16px 0', minHeight: "100vh" }}>
+                    <Content className='structure-content'>
                         {component}
                     </Content>
                 </Layout>
