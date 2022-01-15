@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from "axios";
 import { CITIES, SEARCH_CATEGORIES } from "../helpers/Constants";
-import { Table } from 'antd';
+import { Table, notification } from 'antd';
 import { Link } from "react-router-dom";
 import SelectBox from "../Components/SelectBox";
 import SearchBox from "../Components/SearchBox";
 import HeaderButton from "../Components/HeaderButton";
 import { debounce } from "lodash";
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import Loader from "../Components/Loader";
+import { getBanks } from "../helpers/HttpService";
 
 function AllBanks() {
     const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ function AllBanks() {
     const [searchCategory, setSearchCategory] = useState(SEARCH_CATEGORIES[0].value);
     const [searchQuery, setSearchQuery] = useState("");
     const [favourites, setFavourites] = useState(JSON.parse(localStorage.getItem("favourites")));
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
        refreshData(city);
@@ -26,10 +28,20 @@ function AllBanks() {
             setData(JSON.parse(data));
         }
         else{
-            axios.get(`https://vast-shore-74260.herokuapp.com/banks?city=${currentCity}`).then(res=>{
+            setLoading(true);
+            getBanks(currentCity).then(res=>{
                 setData(res.data);
                 localStorage.setItem(`bankData:${currentCity}`, JSON.stringify(res.data));
-            })
+                setLoading(false);
+            }).catch(err=>{
+                console.log(err);
+                setData([]);
+                notification["error"]({
+                    message: 'Error in fetching data',
+                    description: `${err.message}`
+                  });
+                setLoading(false);
+            });
         }
     }
 
@@ -166,26 +178,32 @@ function AllBanks() {
     }
 
     return (
-        <div>
-            <div className='header-outer'>
-                <h1 className='header-title'>All Banks</h1>
-                <div className='header-filters'>
-                    <SelectBox options={CITIES} type="city" handleChange={handleChange}/>
-                    <SelectBox options={SEARCH_CATEGORIES} type="search_category" handleChange={handleChange}/>
-                    <SearchBox type="search_query" handleChange={handleChange}/>
-                    <HeaderButton handleClick={()=>{
-                        clearCache();
-                    }}
-                    text="Clear Cache"
-                    />
+        <>
+            {
+                loading ? 
+                <Loader/> : null
+            }
+            <div>
+                <div className='header-outer'>
+                    <h1 className='header-title'>All Banks</h1>
+                    <div className='header-filters'>
+                        <SelectBox options={CITIES} type="city" handleChange={handleChange}/>
+                        <SelectBox options={SEARCH_CATEGORIES} type="search_category" handleChange={handleChange}/>
+                        <SearchBox type="search_query" handleChange={handleChange}/>
+                        <HeaderButton handleClick={()=>{
+                            clearCache();
+                        }}
+                        text="Clear Cache"
+                        />
+                    </div>
                 </div>
+                <Table 
+                    scroll={{ x: 1200 }}
+                    columns={columns} 
+                    dataSource={getData()}
+                />
             </div>
-            <Table 
-                scroll={{ x: 1200 }}
-                columns={columns} 
-                dataSource={getData()}
-            />
-        </div>
+        </>
     )
 }
 
