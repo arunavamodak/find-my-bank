@@ -15,4 +15,4 @@ function StructureRoute() {
     )
 }
 
-export default StructureRoute
+export default StructureRoute;

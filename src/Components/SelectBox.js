@@ -21,4 +21,4 @@ function SelectBox({options, handleChange, type}) {
     )
 }
 
-export default SelectBox
+export default SelectBox;

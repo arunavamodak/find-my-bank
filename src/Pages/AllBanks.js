@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { CITIES, SEARCH_CATEGORIES } from "../helpers/Constants";
+import { CITIES, SEARCH_CATEGORIES, CACHE_CLEARING_INTERVAL } from "../library/Constants";
 import { Table, notification } from 'antd';
 import { Link } from "react-router-dom";
 import SelectBox from "../Components/SelectBox";
@@ -8,7 +8,8 @@ import HeaderButton from "../Components/HeaderButton";
 import { debounce } from "lodash";
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import Loader from "../Components/Loader";
-import { getBanks } from "../helpers/HttpService";
+import { getBanks } from "../library/HttpService";
+import { willCacheClear } from "../library/helpers";
 
 function AllBanks() {
     const [data, setData] = useState([]);
@@ -23,15 +24,18 @@ function AllBanks() {
     }, []);
 
     const refreshData = (currentCity) =>{
-        const data = localStorage.getItem(`bankData:${currentCity}`);
-        if(data){
-            setData(JSON.parse(data));
+        const data = JSON.parse(localStorage.getItem(`bankData:${currentCity}`));
+        if(data && !willCacheClear(data["timestamp"])){
+            setData(data["data"]);
         }
         else{
             setLoading(true);
             getBanks(currentCity).then(res=>{
                 setData(res.data);
-                localStorage.setItem(`bankData:${currentCity}`, JSON.stringify(res.data));
+                localStorage.setItem(`bankData:${currentCity}`, JSON.stringify({
+                    data : res.data,
+                    timestamp : new Date().getTime()
+                }));
                 setLoading(false);
             }).catch(err=>{
                 console.log(err);
@@ -78,7 +82,7 @@ function AllBanks() {
     }
 
     const addToFavourites = (record) =>{
-        if(favourites.length){
+        if(favourites && favourites.length){
             const newData = [...favourites].concat(record);
             localStorage.setItem("favourites", JSON.stringify(newData));
             setFavourites(newData);

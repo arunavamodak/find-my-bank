@@ -11,4 +11,4 @@ function SearchBox({handleChange, type }) {
     )
 }
 
-export default SearchBox
+export default SearchBox;

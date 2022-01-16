@@ -43,3 +43,5 @@ export const SEARCH_CATEGORIES = [
         value: "branch"
     }
 ]
+
+export const CACHE_CLEARING_INTERVAL = 5; //In hours
