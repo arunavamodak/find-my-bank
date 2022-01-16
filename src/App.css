@@ -223,3 +223,50 @@ body{
 .table-favourite-active{
   color : red !important;
 }
+
+/* Bank Details */
+.bank-detail-container{
+  padding: 40px;
+  background-color: #00D09B;
+  border-radius: 20px;
+  display: inline-block;
+  width : 850px;
+  filter: drop-shadow(5px 5px 12px rgba(154, 161, 169, 0.4));
+}
+
+.bank-detail-container .bank-name{
+  font-size: 28px;
+  margin-bottom: 20px;
+  color : white;
+}
+
+.bank-detail-container .detail-secondary{
+  font-size: 20px;
+  color : white;
+}
+
+.not-found{
+  height : 100vh !important;
+  width : 100%;
+  background-color: #00D09B;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.not-found h1{
+  font-size: 66px;
+  margin-bottom: 0px;
+  color: rgb(83,102,255);
+  text-align: center;
+}
+
+.not-found h2{
+  font-size: 42px;
+  color: rgb(83,102,255);
+  text-align: center;
+}
+
+.not-found a{
+  font-size: 24px;
+}

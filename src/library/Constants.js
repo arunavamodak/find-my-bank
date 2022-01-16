@@ -44,4 +44,4 @@ export const SEARCH_CATEGORIES = [
     }
 ]
 
-export const CACHE_CLEARING_INTERVAL = 5; //In hours
+export const CACHE_CLEARING_INTERVAL = 24; //In hours

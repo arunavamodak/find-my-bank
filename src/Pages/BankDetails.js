@@ -24,12 +24,23 @@ function BankDetails() {
         }
     }, [ifscCode]);
 
+    console.log(data);
+
     return (
         <>
             {
                 data
                     ?
-                        <div>{data.bank_name}</div>
+                        <div className='bank-detail-container'>
+                            <h1 className='bank-name'>{data.bank_name}</h1>
+                            <h3 className='detail-secondary'>Bank ID : {data.bank_id}</h3>
+                            <h3 className='detail-secondary'>IFSC : {data.ifsc}</h3>
+                            <h3 className='detail-secondary'>Branch : {data.branch}</h3>
+                            <h3 className='detail-secondary'>Address : {data.address}</h3>
+                            <h3 className='detail-secondary'>City : {data.city}</h3>
+                            <h3 className='detail-secondary'>District : {data.district}</h3>
+                            <h3 className='detail-secondary'>State : {data.state}</h3>
+                        </div>
                     :
                         <Loader/>
             }

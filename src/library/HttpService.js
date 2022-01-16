@@ -6,4 +6,4 @@ export const getBanks = (currentCity) => new Promise( (resolve,reject) => {
     }).catch(err=>{
         reject(err);
     })
-}); 
+});
